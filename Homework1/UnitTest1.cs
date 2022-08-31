@@ -14,7 +14,7 @@ namespace Homework1
         By MailAddressSelector = By.XPath("//span[@class='ph-project__user-name svelte-1hiqrvn']");
 
         [Test]
-        public void Test1()
+        public void Login_ValidCredentials_LoginIsSuccessfullTest()
         {
             WebDriver driver = new ChromeDriver { Url = Url };
             driver.Manage().Window.Maximize();
@@ -24,10 +24,9 @@ namespace Homework1
 
             var mailAddress = driver.FindElement(MailAddressSelector);
             var value = mailAddress.Text;
-            Assert.AreEqual(Username, value);
+            Assert.AreEqual(Username, value, "Username doesn't match!");
 
-            driver.Close();
-            driver.Dispose();
+            driver.Quit();
         }
     }
 }
