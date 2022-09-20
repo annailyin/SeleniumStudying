@@ -1,4 +1,5 @@
-﻿using OpenQA.Selenium;
+﻿using Core.Extensions;
+using OpenQA.Selenium;
 
 namespace YandexMailClassLibrary
 {
