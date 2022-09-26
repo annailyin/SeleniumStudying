@@ -3,7 +3,7 @@ using OpenQA.Selenium.Support.UI;
 using SeleniumExtras.WaitHelpers;
 using System;
 
-namespace Core.Extensions
+namespace Extensions
 {
     public static class WebDriverExtensions
     {
@@ -14,21 +14,6 @@ namespace Core.Extensions
             {
                 throw new Exception("Failed to wait until page is loaded.");
             }
-        }
-
-        public static void WaitUntilImageIsFullyLoaded(this IWebDriver webDriver, By selector, TimeSpan timeout)
-        {
-            const string script = @"
-    const [image, done] = arguments;
-    image.addEventListener('load', done, { once: true });
-    if (image.complete && image.naturalHeight !== 0) {
-        done();
-    }
-";
-            var wait = new WebDriverWait(webDriver, timeout);
-            var imageElement = wait.Until(ExpectedConditions.ElementIsVisible(selector));
-            var javaScriptExecutor = (IJavaScriptExecutor)webDriver;
-            javaScriptExecutor.ExecuteAsyncScript(script, imageElement);
         }
 
         public static IWebElement WaitForClickableElement(this IWebDriver webDriver, By selector, TimeSpan timeout)
