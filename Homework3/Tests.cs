@@ -9,7 +9,6 @@ namespace Homework3
     public class Tests
     {
         private WebDriver _webDriver;
-        private YandexMailBoxPage _mailBoxPage;
 
         [SetUp]
         public void SetUp()
@@ -38,21 +37,22 @@ namespace Homework3
         [TestCase("https://yandex.com/", "udod.udodovich@yandex.com", "cxzASDewq123567")]
         public void LogoutFromYandex_UserPressesLogout_LogoutIsSuccessfullTest(string url, string username, string password)
         {
-            LoginToYandexMailBox(url, username, password);
-            _mailBoxPage.Logout();
+            YandexMailBoxPage mailBoxPage = LoginToYandexMailBox(url, username, password);
+            mailBoxPage.Logout();
 
             Assert.Pass("Logout from Yandex has passed successfully!");
         }
 
         #region Private
 
-        public void LoginToYandexMailBox(string url, string username, string password)
+        public YandexMailBoxPage LoginToYandexMailBox(string url, string username, string password)
         {
             _webDriver.Navigate().GoToUrl(url);
 
             YandexStartPage startPage = new YandexStartPage(_webDriver);
             YandexMailHomePage mailHomePage = startPage.GoToMailHomePage();
-            _mailBoxPage = mailHomePage.Login(username, password);
+
+            return mailHomePage.Login(username, password);
         }
 
         #endregion
