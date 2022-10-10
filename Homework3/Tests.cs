@@ -26,20 +26,20 @@ namespace Homework3
         }
 
         [Test]
-        [TestCase("https://yandex.com/", "udod.udodovich@yandex.com", "cxzASDewq123567", "C:\\Temp\\Screenshots")]
-        public void LoginToYandexMailBox_UserEntersValidCredentials_LoginIsSuccessfullTest(string url, string username, string password, string path)
+        [TestCase("https://yandex.com/", "udod.udodovich@yandex.com", "cxzASDewq123567")]
+        public void LoginToYandexMailBox_UserEntersValidCredentials_LoginIsSuccessfullTest(string url, string username, string password)
         {
 
-            LoginToYandexMailBox(url, username, password, path);
+            LoginToYandexMailBox(url, username, password);
 
             Assert.Pass("Login test to Yandex has passed successfully!");
         }
 
         [Test]
-        [TestCase("https://yandex.com/", "udod.udodovich@yandex.com", "cxzASDewq123567", "C:\\Temp\\Screenshots")]
-        public void LogoutFromYandex_UserPressesLogout_LogoutIsSuccessfullTest(string url, string username, string password, string path)
+        [TestCase("https://yandex.com/", "udod.udodovich@yandex.com", "cxzASDewq123567")]
+        public void LogoutFromYandex_UserPressesLogout_LogoutIsSuccessfullTest(string url, string username, string password)
         {
-            YandexMailBoxPage mailBoxPage = LoginToYandexMailBox(url, username, password, path);
+            YandexMailBoxPage mailBoxPage = LoginToYandexMailBox(url, username, password);
             mailBoxPage.Logout();
 
             Assert.Pass("Logout from Yandex has passed successfully!");
@@ -47,12 +47,10 @@ namespace Homework3
 
         #region Private
 
-        public YandexMailBoxPage LoginToYandexMailBox(string url, string username, string password, string path)
+        public YandexMailBoxPage LoginToYandexMailBox(string url, string username, string password)
         {
             _webDriver.Navigate().GoToUrl(url);
-
-            CreateDirectoryIfMissing(path);
-            TakeAndSaveScreenShotByPath(path);
+            TakeAndSaveScreenShotInCurrentDirectory();
 
             YandexStartPage startPage = new YandexStartPage(_webDriver);
             YandexMailHomePage mailHomePage = startPage.GoToMailHomePage();
@@ -60,33 +58,19 @@ namespace Homework3
             return mailHomePage.Login(username, password);
         }
 
-        public void TakeAndSaveScreenShotByPath(string path)
+        public void TakeAndSaveScreenShotInCurrentDirectory()
         {
             try
             {
                 Screenshot image = ((ITakesScreenshot)_webDriver).GetScreenshot();
-                image.SaveAsFile(String.Concat(path, "\\Screenshot.png"), ScreenshotImageFormat.Png);
+                String path = String.Concat(new DirectoryInfo(".").FullName, "\\Screenshot.png");
+                image.SaveAsFile(path, ScreenshotImageFormat.Png);
             }
             catch (Exception e)
             {
                 throw new Exception("Screenshot hasn't been saved!", e);
             }
 
-        }
-
-        private void CreateDirectoryIfMissing(string path)
-        {
-            try
-            {
-                if (!Directory.Exists(path))
-                {
-                    DirectoryInfo di = Directory.CreateDirectory(path);
-                }
-            }
-            catch (IOException ioex)
-            {
-                throw new IOException("Directory hasn't been created!", ioex);
-            }
         }
 
         #endregion
