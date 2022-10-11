@@ -1,3 +1,6 @@
+using Allure.Commons;
+using NUnit.Allure.Attributes;
+using NUnit.Allure.Core;
 using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
@@ -8,6 +11,8 @@ using YandexMailClassLibrary;
 namespace Homework3
 {
     [TestFixture]
+    [AllureNUnit]
+
     public class Tests
     {
         private WebDriver _webDriver;
@@ -25,8 +30,13 @@ namespace Homework3
             _webDriver?.Quit();
         }
 
-        [Test]
+        [Test(Description = "Testing login to yandex.com")]
         [TestCase("https://yandex.com/", "udod.udodovich@yandex.com", "cxzASDewq123567")]
+        [AllureTag("CI")]
+        [AllureSeverity(SeverityLevel.critical)]
+        [AllureIssue("1234")]
+        [AllureOwner("Anna")]
+        [AllureSubSuite("Suite1-Automate")]
         public void LoginToYandexMailBox_UserEntersValidCredentials_LoginIsSuccessfullTest(string url, string username, string password)
         {
 
@@ -35,8 +45,13 @@ namespace Homework3
             Assert.Pass("Login test to Yandex has passed successfully!");
         }
 
-        [Test]
+        [Test(Description = "Testing logout from yandex.com")]
         [TestCase("https://yandex.com/", "udod.udodovich@yandex.com", "cxzASDewq123567")]
+        [AllureTag("CI")]
+        [AllureSeverity(SeverityLevel.critical)]
+        [AllureIssue("1235")]
+        [AllureOwner("Anna")]
+        [AllureSubSuite("Suite2-Automate")]
         public void LogoutFromYandex_UserPressesLogout_LogoutIsSuccessfullTest(string url, string username, string password)
         {
             YandexMailBoxPage mailBoxPage = LoginToYandexMailBox(url, username, password);
