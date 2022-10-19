@@ -25,6 +25,7 @@ namespace YandexMailClassLibrary
             WebDriver.WaitForVisibleElement(PasswordInputSelector, DefaultTimeout).SendKeys(password);
             WebDriver.WaitForClickableElement(SignInButtonSelector, DefaultTimeout).Click();
             WebDriver.WaitUntilPageIsLoaded(YandexMailBoxPage.BaseURL, DefaultTimeout);
+            
 
             return new YandexMailBoxPage(WebDriver);
         }

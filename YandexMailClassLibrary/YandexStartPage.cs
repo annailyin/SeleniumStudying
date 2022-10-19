@@ -6,6 +6,7 @@ namespace YandexMailClassLibrary
     public class YandexStartPage : WebPageBase
     {
         public static readonly By LoginLinkSelector = By.XPath("//div[contains(@class, 'b-inline') and text() = 'Log in']");
+        public static readonly By AcceptCookiesSelector = By.XPath("//button[contains(@class, 'sc-jrsJCI')]");
 
         public YandexStartPage(IWebDriver webDriver) : base(webDriver)
         {
@@ -13,6 +14,7 @@ namespace YandexMailClassLibrary
 
         public YandexMailHomePage GoToMailHomePage()
         {
+            WebDriver.WaitForClickableElement(AcceptCookiesSelector, DefaultTimeout).Click();
             WebDriver.WaitForClickableElement(LoginLinkSelector, DefaultTimeout).Click();
             WebDriver.WaitUntilPageIsLoaded(YandexMailHomePage.BaseURL, DefaultTimeout);
 
