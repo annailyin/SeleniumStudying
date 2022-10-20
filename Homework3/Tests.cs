@@ -2,6 +2,7 @@ using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Edge;
+using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium.Remote;
 using System;
 using System.Collections.Generic;
@@ -10,28 +11,25 @@ using YandexMailClassLibrary;
 
 namespace Homework3
 {
-    [TestFixture]
-    public class Tests
+    [TestFixtureSource(typeof(Tests.TestFixtureSource), nameof(Tests.TestFixtureSource.FixtureParams))]
+    public partial class Tests
     {
         private WebDriver _webDriver;
+        private readonly string _browserName;
+        private readonly string _browserVersion;
+        private readonly string _platformName;
+
+        public Tests(string browserName, string browserVersion, string platformName)
+        {
+            _browserName = browserName;
+            _browserVersion = browserVersion;
+            _platformName = platformName;
+        }
 
         [SetUp]
         public void SetUp()
         {
-            ChromeOptions options = new ChromeOptions
-            {  
-                PlatformName = "Windows 10",
-                BrowserVersion = "latest",
-            };
-
-            options.AddArguments("--incognito");
-
-            var sauceOptions = new Dictionary<string, object>();
-            sauceOptions.Add("username", Environment.GetEnvironmentVariable("SAUCE_USERNAME"));
-            sauceOptions.Add("accessKey", Environment.GetEnvironmentVariable("SAUCE_ACCESS_KEY"));
-            options.AddAdditionalOption("sauce:options", sauceOptions);
-
-            _webDriver = new RemoteWebDriver(new Uri("https://oauth-anna.ilyin-e951d:f7d5071a-fb1b-41fd-ba2e-fe43851ef6be@ondemand.eu-central-1.saucelabs.com:443/wd/hub"), options);
+            _webDriver = GetDriver(_browserName, _browserVersion, _platformName);
             _webDriver.Manage().Window.Maximize();
         }
 
@@ -85,6 +83,48 @@ namespace Homework3
             catch (Exception e)
             {
                 throw new Exception("Screenshot hasn't been saved!", e);
+            }
+        }
+
+        public WebDriver GetDriver(string browserName, string browserVersion, string platformName)
+        {
+            var driverOptions = GetDriverOptions(browserName, browserVersion, platformName);
+            var remoteAddress = new Uri("https://oauth-anna.ilyin-e951d:f7d5071a-fb1b-41fd-ba2e-fe43851ef6be@ondemand.eu-central-1.saucelabs.com:443/wd/hub");
+            return new RemoteWebDriver(remoteAddress, driverOptions);
+        }
+
+        private DriverOptions GetDriverOptions(string browserName, string browserVersion, string platformName)
+        {
+            var options = GetBrowserSpecificDriverOptions(browserName);
+            options.PlatformName = platformName;
+            options.BrowserVersion = browserVersion;
+            options.AddAdditionalOption("sauce:options", new Dictionary<string, object>
+            {
+                { "username", Environment.GetEnvironmentVariable("SAUCE_USERNAME") },
+                { "accessKey", Environment.GetEnvironmentVariable("SAUCE_ACCESS_KEY") }
+            });
+
+            return options;
+        }
+
+        private DriverOptions GetBrowserSpecificDriverOptions(string browserName)
+        {
+            switch (browserName)
+            {
+                case "Chrome":
+                    var chromeOptions = new ChromeOptions();
+                    chromeOptions.AddArguments("--incognito");
+                    return chromeOptions;
+                case "Firefox":
+                    var firefoxOptions = new FirefoxOptions();
+                    firefoxOptions.AddArguments("--incognito");
+                    return firefoxOptions;
+                case "Edge":
+                    var edgeOptions = new EdgeOptions();
+                    edgeOptions.AddArguments("--incognito");
+                    return edgeOptions;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
 
