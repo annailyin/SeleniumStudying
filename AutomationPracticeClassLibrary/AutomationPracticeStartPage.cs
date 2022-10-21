@@ -12,9 +12,9 @@ namespace AutomationPracticeClassLibrary
         {
         }
 
-        public AutomationPracticeCreateAccountPage CreateAccount(string emailAddress)
+        public AutomationPracticeCreateAccountPage GoToCreateAccountPage(AutomationPracticeAccount account)
         {
-            WebDriver.WaitForVisibleElement(EmailAddressInputSelector, DefaultTimeout).SendKeys(emailAddress);
+            WebDriver.WaitForVisibleElement(EmailAddressInputSelector, DefaultTimeout).SendKeys(account.EmailAddress);
             WebDriver.WaitForClickableElement(CreateAccountSubmitButtonSelector, DefaultTimeout).Click();
             WebDriver.WaitUntilPageIsLoaded(AutomationPracticeCreateAccountPage.BaseURL, DefaultTimeout);
 
