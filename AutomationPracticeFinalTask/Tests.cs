@@ -1,4 +1,5 @@
-using AutomationPracticeClassLibrary;
+using AutomationPracticeClassLibrary.Entities;
+using AutomationPracticeClassLibrary.Pages;
 using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
@@ -14,7 +15,7 @@ namespace AutomationPracticeFinalTask
 
         private WebDriver _webDriver;
 
-        private AutomationPracticeAccount _account;
+        private User _user;
 
         [SetUp]
         public void Setup()
@@ -32,24 +33,48 @@ namespace AutomationPracticeFinalTask
         }
 
         [Test]
-        [TestCase("udod.udodovich@yandex.com")]
-        public void CreateAutomationPracticeAccount_UserEntersValidData_AccountCreatedSuccessfullTest(string emailAddress)
+        public void CreateAutomationPracticeAccount_UserEntersValidData_AccountCreatedSuccessfullTest()
+        {
+            AutomationPracticeStartPage startPage = GoToAutomationPracticeStartPage();
+            AutomationPracticeCreateAccountPage createAccountPage = startPage.GoToCreateAccountPage(_user);
+            createAccountPage.CreateAccount(_user);
+        }
+
+        [Test]
+        public void LoginWithinAutomationPracticeAccount_UserEntersLoginAndPassword_LoginIsSuccessfullTest()
+        {
+            LoginWithinAutomationPracticeAccount();
+        }
+
+        [Test]
+        public void AddToAutoCreatedWishList_UserAddsProductsToWishList_ProductsAddedToAutoCreatedWishListSuccessfullTest()
+        {
+            AutomationPracticeMyAccountPage myAccountPage = LoginWithinAutomationPracticeAccount();
+            myAccountPage.GoToMyWishlists();
+        }
+
+        #region Private
+
+        private void ReadJsonDataForAutomationPracticeAccount(string fileName)
+        {
+            _user = new User();
+
+            string jsonString = File.ReadAllText(fileName);
+            _user = JsonSerializer.Deserialize<User>(jsonString);
+        }
+
+        private AutomationPracticeStartPage GoToAutomationPracticeStartPage()
         {
             _webDriver.Navigate().GoToUrl(_baseURL);
 
-            AutomationPracticeStartPage startPage = new AutomationPracticeStartPage(_webDriver);
-            AutomationPracticeCreateAccountPage createAccountPage = startPage.GoToCreateAccountPage(_account);
-            createAccountPage.CreateAccount(_account);
+            return new AutomationPracticeStartPage(_webDriver);
         }
 
-        #region private
-
-        public void ReadJsonDataForAutomationPracticeAccount(string fileName)
+        private AutomationPracticeMyAccountPage LoginWithinAutomationPracticeAccount()
         {
-            _account = new AutomationPracticeAccount();
+            AutomationPracticeStartPage startPage = GoToAutomationPracticeStartPage();
 
-            string jsonString = File.ReadAllText(fileName);
-            _account = JsonSerializer.Deserialize<AutomationPracticeAccount>(jsonString);
+            return startPage.Login(_user);
         }
 
         #endregion

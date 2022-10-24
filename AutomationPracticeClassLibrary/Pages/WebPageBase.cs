@@ -1,7 +1,7 @@
 ﻿using OpenQA.Selenium;
 using System;
 
-namespace AutomationPracticeClassLibrary
+namespace AutomationPracticeClassLibrary.Pages
 {
     public abstract class WebPageBase
     {

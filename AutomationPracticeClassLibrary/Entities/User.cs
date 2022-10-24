@@ -1,6 +1,6 @@
-﻿namespace AutomationPracticeClassLibrary
+﻿namespace AutomationPracticeClassLibrary.Entities
 {
-    public class AutomationPracticeAccount
+    public class User
     {
         public string EmailAddress { get; set; }
 
