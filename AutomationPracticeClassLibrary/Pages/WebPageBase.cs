@@ -5,7 +5,7 @@ namespace AutomationPracticeClassLibrary.Pages
 {
     public abstract class WebPageBase
     {
-        protected static readonly TimeSpan DefaultTimeout = TimeSpan.FromMinutes(1);
+        protected static readonly TimeSpan DefaultTimeout = TimeSpan.FromMinutes(2);
 
         protected IWebDriver WebDriver { get; }
 

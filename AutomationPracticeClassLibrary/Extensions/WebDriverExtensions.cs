@@ -27,5 +27,11 @@ namespace AutomationPracticeClassLibrary.Extensions
             var wait = new WebDriverWait(webDriver, timeout);
             return wait.Until(ExpectedConditions.ElementIsVisible(selector));
         }
+
+        public static bool WaitForInvisibleElement(this IWebDriver webDriver, By selector, TimeSpan timeout)
+        {
+            var wait = new WebDriverWait(webDriver, timeout);
+            return wait.Until(ExpectedConditions.InvisibilityOfElementLocated(selector));
+        }
     }
 }

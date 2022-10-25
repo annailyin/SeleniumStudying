@@ -50,7 +50,9 @@ namespace AutomationPracticeFinalTask
         public void AddToAutoCreatedWishList_UserAddsProductsToWishList_ProductsAddedToAutoCreatedWishListSuccessfullTest()
         {
             AutomationPracticeMyAccountPage myAccountPage = LoginWithinAutomationPracticeAccount();
-            myAccountPage.GoToMyWishlists();
+            string confirmationText = myAccountPage.AddProductToAutoCreatedWishlist();
+
+            Assert.AreEqual("Added to your wishlist.", confirmationText);
         }
 
         #region Private
