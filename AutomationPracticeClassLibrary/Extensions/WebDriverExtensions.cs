@@ -15,6 +15,11 @@ namespace AutomationPracticeClassLibrary.Extensions
                 throw new Exception("Failed to wait until page is loaded.");
             }
         }
+        public static IWebDriver WaitForFrameAndSwitchToIt(this IWebDriver webDriver, By selector, TimeSpan timeout)
+        {
+            var wait = new WebDriverWait(webDriver, timeout);
+            return wait.Until(ExpectedConditions.FrameToBeAvailableAndSwitchToIt(selector));
+        }
 
         public static IWebElement WaitForClickableElement(this IWebDriver webDriver, By selector, TimeSpan timeout)
         {

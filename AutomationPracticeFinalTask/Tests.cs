@@ -5,6 +5,7 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using System.IO;
 using System.Text.Json;
+using System.Threading;
 
 namespace AutomationPracticeFinalTask
 {
@@ -33,6 +34,7 @@ namespace AutomationPracticeFinalTask
         }
 
         [Test]
+        [TestCase(Description = "Testing login creation for AutomationPractice site.")]
         public void CreateAutomationPracticeAccount_UserEntersValidData_AccountCreatedSuccessfullTest()
         {
             AutomationPracticeStartPage startPage = GoToAutomationPracticeStartPage();
@@ -41,18 +43,39 @@ namespace AutomationPracticeFinalTask
         }
 
         [Test]
+        [TestCase(Description = "Testing login to AutomationPractice site.")]
         public void LoginWithinAutomationPracticeAccount_UserEntersLoginAndPassword_LoginIsSuccessfullTest()
         {
             LoginWithinAutomationPracticeAccount();
         }
 
         [Test]
-        public void AddToAutoCreatedWishList_UserAddsProductsToWishList_ProductsAddedToAutoCreatedWishListSuccessfullTest()
+        [TestCase(Description = "Testing automatical creation of a wishlist and adding products to it.")]
+        public void UserIsAuthenticatedAndWishlistIsAutoCreatedIfNotExists_UserAddsProductsToAutoCreatedWishlist_NotificationAboutAddingProductsIsShown()
         {
             AutomationPracticeMyAccountPage myAccountPage = LoginWithinAutomationPracticeAccount();
             string confirmationText = myAccountPage.AddProductToAutoCreatedWishlist();
 
             Assert.AreEqual("Added to your wishlist.", confirmationText);
+        }
+
+        [Test]
+        [TestCase(Description = "Testing manually creation of a wishlist and adding products to it.")]
+        public void UserIsAuthenticatedAndWishlistIsCreatedManually_UserAddsProductsToManuallyCreatedWishlist_NotificationAboutAddingProductsIsShown()
+        {
+            AutomationPracticeMyAccountPage myAccountPage = LoginWithinAutomationPracticeAccount();
+            string confirmationText = myAccountPage.AddProductToManuallyCreatedWishlist("test");
+
+            Assert.AreEqual("Added to your wishlist.", confirmationText);
+        }
+
+        [Test(Description = "Testing adding products to the cart.")]
+        [TestCase(3)]
+        public void UserIsAuthenticated_UserAddsDifferentProductsToCart_AllAddedProductsAreInCart(int count)
+        {
+            AutomationPracticeMyAccountPage myAccountPage = LoginWithinAutomationPracticeAccount();
+
+            Assert.IsTrue(myAccountPage.DifferentProductsAreAddedToCart(count));
         }
 
         #region Private
