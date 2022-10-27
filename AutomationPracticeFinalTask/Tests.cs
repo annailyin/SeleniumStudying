@@ -3,27 +3,35 @@ using AutomationPracticeClassLibrary.Pages;
 using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Firefox;
+using OpenQA.Selenium.Edge;
+using System;
 using System.IO;
 using System.Text.Json;
 using System.Threading;
 
 namespace AutomationPracticeFinalTask
 {
-    [TestFixture]
-    public class Tests
+    [TestFixtureSource(typeof(Tests.TestFixtureSource), nameof(Tests.TestFixtureSource.FixtureParams))]
+    public partial class Tests
     {
         private const string _baseURL = "http://automationpractice.com/index.php?controller=authentication&back=my-account";
 
         private WebDriver _webDriver;
-
         private User _user;
+        private readonly string _browserName;
+
+        public Tests(string browserName)
+        {
+            _browserName = browserName;
+        }
 
         [SetUp]
-        public void Setup()
+        public void SetUp()
         {
             ReadJsonDataForAutomationPracticeAccount("Account.json");
 
-            _webDriver = new ChromeDriver();
+            _webDriver = GetDriver(_browserName);
             _webDriver.Manage().Window.Maximize();
         }
 
@@ -79,6 +87,17 @@ namespace AutomationPracticeFinalTask
         }
 
         #region Private
+
+        public WebDriver GetDriver(string browserName)
+        {
+            return browserName switch
+            {
+                "Firefox" => new FirefoxDriver(),
+                "Chrome" => new ChromeDriver(),
+                "Edge" => new EdgeDriver(),
+                _ => throw new ArgumentOutOfRangeException()
+            };
+        }
 
         private void ReadJsonDataForAutomationPracticeAccount(string fileName)
         {
