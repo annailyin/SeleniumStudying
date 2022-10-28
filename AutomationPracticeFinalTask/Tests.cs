@@ -3,12 +3,11 @@ using AutomationPracticeClassLibrary.Pages;
 using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium.Edge;
+using OpenQA.Selenium.Firefox;
 using System;
 using System.IO;
 using System.Text.Json;
-using System.Threading;
 
 namespace AutomationPracticeFinalTask
 {
