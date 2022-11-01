@@ -11,9 +11,10 @@ namespace AutomationPracticeFinalTask
             {
                 get
                 {
-                    yield return new TestFixtureData("Firefox");
-                    yield return new TestFixtureData("Chrome");
-                    yield return new TestFixtureData("Edge");
+                    yield return new TestFixtureData("Local", "Chrome", null, null);
+                    yield return new TestFixtureData("Local", "Edge", null, null);
+                    yield return new TestFixtureData("Remote", "Chrome", "latest", "Windows 11");
+                    yield return new TestFixtureData("Remote", "Edge", "latest", "Windows 10");
                 }
             }
         }

@@ -1,5 +1,6 @@
 ﻿using AutomationPracticeClassLibrary.Extensions;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Interactions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,7 +23,7 @@ namespace AutomationPracticeClassLibrary.Pages
         public static readonly By AddToCartButtonSelector = By.Id("add_to_cart");
         public static readonly By ContinueShoppingButton = By.ClassName("continue");
         public static readonly By IframeSelector = By.CssSelector("iframe.fancybox-iframe");
-        public static readonly By BestSellersProductsSelector = By.CssSelector("a[href *='id_product'][class='product_img_link']");
+        public static readonly By BestSellersProductsSelector = By.CssSelector("a[href *='automationpractice.com/index.php?id_product'][class='product_img_link']");
         public static readonly By PriceOfProductSelector = By.Id("our_price_display");
         public static readonly By ShoppingCartSelector = By.XPath("//a[@title='View my shopping cart']");
         public static readonly By CartSummaryTableSelector = By.Id("cart_summary");
@@ -71,7 +72,7 @@ namespace AutomationPracticeClassLibrary.Pages
 
             foreach (var product in products.Randomize().Take(count))
             {
-                product.Click();
+                WebDriver.WaitForClickableElement(product, DefaultTimeout).Click();
                 WebDriver.WaitForFrameAndSwitchToIt(IframeSelector, DefaultTimeout);
                 totalPrice += GetValueWithoutCurrencySign(PriceOfProductSelector);
                 WebDriver.WaitForClickableElement(AddToCartButtonSelector, DefaultTimeout).Click();
@@ -119,7 +120,7 @@ namespace AutomationPracticeClassLibrary.Pages
 
         private string AddRandomProductToWishlist(IList<IWebElement> products)
         {
-            products.Randomize().Take(1).ToList().ElementAt(0).Click();                 
+            products.Randomize().First().Click();                
             WebDriver.WaitForClickableElement(WishlistButtonSelector, DefaultTimeout).Click();
 
             return WebDriver.WaitForVisibleElement(ConfirmationBoxSelector, DefaultTimeout).Text;

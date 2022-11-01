@@ -27,6 +27,12 @@ namespace AutomationPracticeClassLibrary.Extensions
             return wait.Until(ExpectedConditions.ElementToBeClickable(selector));
         }
 
+        public static IWebElement WaitForClickableElement(this IWebDriver webDriver, IWebElement element, TimeSpan timeout)
+        {
+            var wait = new WebDriverWait(webDriver, timeout);
+            return wait.Until(ExpectedConditions.ElementToBeClickable(element));
+        }
+
         public static IWebElement WaitForVisibleElement(this IWebDriver webDriver, By selector, TimeSpan timeout)
         {
             var wait = new WebDriverWait(webDriver, timeout);
